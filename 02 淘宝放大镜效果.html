@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #box{width: 130px;height: 130px;margin: 100px;position: relative;float: left;}
+        #box div{width: 60px;height: 40px;background: rgba(255,0,0,0.2);position: absolute;display: none;cursor: all-scroll;}
+        #wai {width: 369px;height: 246px;border: 1px solid blue;overflow: hidden;float: left;margin-top: 100px;position: relative;display: none;}
+        #wai img{position: absolute;}
+    </style>
+    <script>
+        window.onload = function (){
+
+            var oBox = document.getElementById("box");
+            var oDiv = oBox.getElementsByTagName("div")[0];  //移动的小方块
+            var img = oBox.getElementsByTagName("img")[0];  //移动的小方块
+
+            var wai = document.getElementById("wai");
+            var oImg = wai.getElementsByTagName("img")[0]; //大图
+
+            //1.显示和隐藏
+            oBox.onmouseover = function (){
+                oDiv.style.display = "block";
+                wai.style.display = "block";
+            }
+            oBox.onmouseout = function (){
+                oDiv.style.display = "none";
+                wai.style.display = "none";
+            }
+
+            oBox.onmousemove = function (ev){
+                var ev = window.event || ev;
+                var left = ev.clientX - oBox.offsetLeft-oDiv.offsetWidth/2;
+                var top = ev.clientY - oBox.offsetTop-oDiv.offsetHeight/2;
+                if(left < 0){left = 0;}
+                if(left > oBox.clientWidth - oDiv.offsetWidth){
+                    left = oBox.clientWidth - oDiv.offsetWidth;
+                }
+                if(top < 0){top = 0;}
+                if(top > oBox.clientHeight - oDiv.offsetHeight){
+                    top = oBox.clientHeight - oDiv.offsetHeight;
+                }
+
+                oDiv.style.left = left + "px";
+                oDiv.style.top = top + "px";
+
+
+                //移动图片   130/10 = 800/?  ? = 800*left/130
+                oImg.style.left = - oImg.offsetWidth*left/oBox.clientWidth +"px";
+                oImg.style.top = - oImg.offsetHeight * top/oBox.clientHeight + "px";
+
+
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+    <div id="box">
+        <div></div>
+        <img src="small.jpg" alt="" width="130" height="130">
+    </div>
+    <div id="wai">
+        <img src="big.jpg" alt="" width="800" height="800">
+    </div>
+</body>
+</html>
