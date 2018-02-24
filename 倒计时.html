@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #box{width: 500px;height: 500px;background: #eee;margin: 20px auto;text-align: center;}
+        #box h3{font-size: 32px;padding: 30px;color: white;}
+        #box input{width: 100px;}
+        button{width: 160px;height: 160px;background: #000;margin-top: 30px;border-radius:80px;color: yellow;font-size:40px;}
+        .p1 span{font-size: 24px;color: yellow;}
+        .p2{font-size: 30px;color: white;}
+        .p2 span{font-size: 40px;color: yellow;}
+    </style>
+    <script>
+        window.onload = function (){
+
+            var oInput = document.getElementsByTagName("input");
+            var oBut = document.getElementsByTagName("button")[0];
+            var oSpan = document.getElementsByTagName("span");
+            var timer = null;
+
+            oBut.onclick = function (){
+                //1.先获取input的信息
+                var y = oInput[0].value;
+                var m = oInput[1].value;
+                var d = oInput[2].value;
+
+                //2.显示现在的时间   00:00:00
+                oSpan[0].innerHTML = y + "年" + m +"月"+d+"日";
+
+
+
+
+
+
+                dao();
+                //3.计算倒计时
+                clearInterval(timer);
+               timer = setInterval(dao,1000);
+                function dao(){
+                    var oldDate = new Date(); //当前时间
+//                var newDate = new Date("2017,11,21,12:12:12"); //未来的时间
+                    var newDate = new Date(y,m-1,d);  //12
+
+                    //计算两个时间之间的相差时间，想减,得到两个时间的时间戳(毫秒)
+                    var time = parseInt((newDate-oldDate)/1000);  //s
+
+
+                    oSpan[1].innerHTML = parseInt(time/86400);
+                    oSpan[2].innerHTML = parseInt(time%86400/3600);
+                    oSpan[3].innerHTML = parseInt(time%3600/60);
+                    oSpan[4].innerHTML = parseInt(time%60);
+
+
+
+
+                    /*
+                     m = s/60
+                     h = s/3600
+                     t = s/60/60/24      /86400
+
+
+
+
+
+
+                     28
+                     *
+                     * */
+                }
+
+
+
+
+
+
+
+
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+    <div id="box">
+        <h3>倒计时</h3>
+        请输入：<input type="text" value="2017"/>年 <input type="text" value="11"/>月 <input type="text" value="21"/>日
+        <button>开始</button>
+        <p class="p1">现在距离- <span>0000</span> -还剩：</p>
+        <p class="p2"><span>00</span>天 <span>00</span>小时 <span>00</span>分 <span>00</span>秒</p>
+    </div>
+</body>
+</html>
