@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>#canvas{margin:0 30%}</style>
+</head>
+<body>
+   <canvas id="canvas" width="500" height="500">此浏览器不支持canvas</canvas>
+   <script>
+//    绘制手表大致分为以下几步：
+//    1.获取画笔，准备绘制
+//    2.画表
+        // 2.1绘制表盘
+        // 2.2绘制刻度
+        //    2.2.1绘制时针刻度
+        //    2.2.2绘制分秒针刻度
+        // 2.3获取世界时间
+        // //  获取时分秒等等。  
+        // 2.4绘制指针
+        //    2.4.1绘制时针
+        //    2.4.2绘制分针
+        //    2.4.3绘制秒针
+        //    2.4.3-1秒针顶头圆点
+        //    2.4.3-2秒针所在表盘中心圆点
+        //    2.4.4绘制文字
+//    3.setInterval()
+    
+    // 1.获取画笔，准备绘制
+    var cas = document.getElementById('canvas').getContext('2d');
+     // 3.setInterval()
+    setInterval(drawClock,1000)
+    // 2.画表  
+    function drawClock(){
+      cas.clearRect(0,0,500,500)
+      // 2.1绘制表盘
+      cas.beginPath();
+      cas.arc(250,250,200,0,Math.PI*2);
+      cas.closePath();
+      cas.lineWidth=8;
+      cas.stroke()
+      // 2.2绘制刻度
+      //    2.2.1绘制时针刻度
+      for(var i=0;i<12;i++){
+        cas.save()//save()是用来保存当前画布状态的
+        cas.translate(250,250);
+        cas.rotate(i*Math.PI/6);//30,60
+        cas.beginPath();
+        cas.moveTo(0,-200);
+        cas.lineTo(0,-175)
+        cas.closePath()
+        cas.lineWidth=5;
+        cas.stroke()
+        cas.restore()//返回上一个save()保存的状态  
+      }
+      //    2.2.2绘制分秒针刻度  
+       for(var i=0;i<60;i++){
+        cas.save()//save()是用来保存当前画布状态的
+        cas.translate(250,250);
+        cas.rotate(i*Math.PI/30);
+        cas.beginPath();
+        cas.moveTo(0,-200);
+        cas.lineTo(0,-185)
+        cas.closePath()
+        cas.lineWidth=3;
+        cas.stroke()
+        cas.restore()//返回上一个save()保存的状态  
+      }
+      // 2.3获取世界时间
+   var now    = new Date(),
+       second = now.getSeconds(),
+       minute = now.getMinutes(),
+       //获取小时要注意：当小时数大于12时，怎么把24进制转化为12进制
+       hour1  = now.getHours();
+   var hour = hour1+minute/60;
+       hour= hour>12?hour-12:hour;
+    //    console.log(now)
+    //    console.log(hour)
+    //    console.log(minute)
+    //    console.log(second)
+      // 2.4绘制指针
+        //    2.4.1绘制时针
+        cas.save()//save()是用来保存当前画布状态的
+        cas.translate(250,250);
+        cas.rotate(hour*Math.PI/6);//
+        cas.beginPath();
+        cas.moveTo(0,-120)
+        cas.lineTo(0,10)
+        // cas.closePath()
+        cas.lineWidth=5;
+        cas.lineCap="round"
+        cas.stroke()
+        cas.restore()//返回上一个save()保存的状态  
+        //    2.4.2绘制分针
+        cas.save()//save()是用来保存当前画布状态的
+        cas.translate(250,250);
+        cas.rotate(minute*Math.PI/30);//
+        cas.beginPath();
+        cas.moveTo(0,-140)
+        cas.lineTo(0,15)
+        // cas.closePath()
+        cas.lineWidth=3;
+        cas.lineCap="round"
+        cas.stroke()
+        cas.restore()//返回上一个save()保存的状态  
+        //    2.4.3绘制秒针
+        cas.save()//save()是用来保存当前画布状态的
+        cas.translate(250,250);
+        cas.rotate(second*Math.PI/30);//
+        cas.beginPath();
+        cas.moveTo(0,-150)
+        cas.lineTo(0,18)
+        // cas.closePath()
+        cas.lineWidth=1;
+        cas.lineCap="round"
+        cas.strokeStyle="blue"
+        cas.stroke()
+        //    2.4.3-1秒针顶头圆点,要与秒针的绘制结合在一起
+        cas.beginPath()
+        cas.arc(0,-135,5,0,Math.PI*2);
+        cas.closePath()
+        cas.fillStyle="#fff"
+        cas.fill()
+        cas.strokeStyle="blue"
+        cas.stroke()
+        //    2.4.3-2秒针所在表盘中心圆点
+        cas.beginPath()
+        cas.arc(0,0,5,0,Math.PI*2);
+        cas.closePath()
+        cas.fillStyle="#fff"
+        cas.fill()
+        cas.strokeStyle="blue"
+        cas.stroke()
+        cas.restore()//返回上一个save()保存的状态 
+        //    2.4.4绘制文字
+        cas.font="20px Yahei";
+        cas.fillText("Daniel Wellington",167,150)
+    }
+
+
+   </script> 
+</body>
+</html>
