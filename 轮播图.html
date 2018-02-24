@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{padding: 0;margin: 0;list-style: none;}
+        #tab{width: 300px;border: 1px solid #333;margin: 20px auto;padding: 10px;font: 14px "Microsoft YaHei";}
+        #nav{height: 30px;}
+        #nav li{width: 80px;height: 30px;background: #9fc;float: left;line-height: 30px;text-align: center;margin-right: 2px;}
+        #nav .active{background: #066;color: #fff;}
+        .box{width: 300px;height: 90px;padding-top: 1px;display: none;}
+        .box img{width: 200px;height: 89px;float: left}
+        .box ul{width: 100px;float: right;}
+        .box ul li{width: 100px;height: 29px;line-height: 29px;background: #f1f1f1;margin-bottom: 1px;text-indent: 24px;}
+        .box ul .active{background: #69c;}
+
+    </style>
+    <script>
+        window.onload = function (){
+            var tab = document.getElementById("tab");
+            var navLi = document.getElementById("nav").getElementsByTagName("li");
+            var box = tab.getElementsByTagName("div");
+            var imgs = [["img/1.jpg","img/2.jpg","img/3.jpg"],["img/4.jpg","img/3.jpg","img/2.jpg"]];
+            var num = 0; //标志图片
+            var now = 0; //标志div
+
+            //点击切换div
+            for(var i = 0; i < navLi.length;i++){
+                navLi[i].index = i;
+                navLi[i].onclick = function (){
+                    for(var j =0 ;j < navLi.length;j++){
+                        navLi[j].className = "";
+                        box[j].style.display = "none";
+                    }
+                    this.className = "active";
+                    box[this.index].style.display = "block";
+
+                    now = this.index;
+                    num = 0;
+                }
+            }
+
+           var timer =  setInterval(autoPlay,1000);
+            function autoPlay(){
+                num++;
+                if(num == 3){
+                    now = now == 0 ? 1 : 0;
+                    num = 0;
+                }
+
+
+                for(var j =0 ;j < navLi.length;j++){
+                    navLi[j].className = "";
+                    box[j].style.display = "none";
+                }
+                navLi[now].className = "active";
+                box[now].style.display = "block";
+
+
+                var img = box[now].getElementsByTagName("img")[0];
+                var oLi = box[now].getElementsByTagName("li");
+
+                img.src = imgs[now][num];
+                for(var k = 0; k < oLi.length;k++){
+                    oLi[k].className = "";
+                }
+                oLi[num].className = "active";
+
+            }
+
+
+            tab.onmouseover = function (){
+                clearInterval(timer);
+            }
+            tab.onmouseout = function (){
+                timer = setInterval(autoPlay,1000);
+            }
+
+        }
+    </script>
+</head>
+<body>
+<div id="tab">
+    <ul id="nav">
+        <li class="active">菜单一</li>
+        <li>菜单二</li>
+    </ul>
+    <div class="box" style="display: block">
+        <img src="img/1.jpg" alt=""/>
+        <ul>
+            <li class="active">图片一</li>
+            <li>图片二</li>
+            <li>图片三</li>
+        </ul>
+    </div>
+    <div class="box">
+        <img src="img/4.jpg" alt=""/>
+        <ul>
+            <li class="active">图片四</li>
+            <li>图片五</li>
+            <li>图片六</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
