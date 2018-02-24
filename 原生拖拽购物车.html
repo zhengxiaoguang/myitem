@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+<script>
+
+var oDiv1 = null;
+var oDiv2 = null;
+var oDiv3 = null;
+var oTotal = null;
+window.onload = function()
+{
+	
+	oDiv1 = document.getElementById('div1');//产品一
+	oDiv2 = document.getElementById('div2');//购物车
+	oDiv3 = document.getElementById('div3');//产品二
+	oTotal = document.getElementById('total');
+	
+	shopCart( oDiv1 );
+	shopCart( oDiv3 );
+	
+};
+
+
+function shopCart( eles )
+{
+	var L1 = 0;
+	var L2 = 0;
+	
+	var T1 = 0;
+	var T2 = 0;
+	
+	
+	var R1 = 0;
+	var R2 = 0;
+	
+	var B1 = 0;
+	var B2 = 0;
+	
+		
+	var obj = {};
+	
+	/*eles.onclick = function(ev)
+	{
+		ev.cancelBubble = true;
+		return false;
+		
+	};*/
+	eles.onmousedown = function(ev)
+	{
+		
+		var oC = document.createElement('div');
+		oC.style.width = eles.offsetWidth - 2 + 'px';
+		oC.style.height = eles.offsetHeight - 2 + 'px';
+		
+		oC.style.left = eles.offsetLeft + 'px';
+		oC.style.top = eles.offsetTop + 'px';
+		
+		oC.className = 'ccc';
+		oC.innerHTML = eles.innerHTML;
+		
+		var oSpan = oC.getElementsByTagName('span')[0];
+		var oFont = oC.getElementsByTagName('font')[0];
+		
+		document.body.appendChild( oC );
+		
+		var oName = oSpan.innerHTML;//产品名字
+		var oPrice = parseFloat(oFont.innerHTML);//价格
+		
+		var ev = ev || event;
+		var disX = ev.clientX - eles.offsetLeft;
+		var disY = ev.clientY - eles.offsetTop;
+		
+		document.onmousemove = function(ev)
+		{
+			var ev = ev || event;
+			
+			
+			var L = ev.clientX - disX;
+			var T = ev.clientY - disY;
+			
+			
+			oC.style.left = L + 'px';
+			oC.style.top = T + 'px';
+			
+			
+			
+			L1 = L + eles.offsetWidth;  //小方框到页面左边的距离+本身的宽度
+			L2 = oDiv2.offsetLeft;//大方框到页面左边的距离
+			
+			T1 = T + eles.offsetHeight;////小方框到页面顶部的距离+本身的高度
+			T2 = oDiv2.offsetTop;//大方框到页面顶部的距离
+			
+			
+			R1 = L;//小方框到页面左边的距离
+			R2 = oDiv2.offsetLeft + oDiv2.offsetWidth;////大方框到页面左边的距离 + 本身的宽
+			
+			B1 = T;//小方框到页面顶部的距离
+			B2 = oDiv2.offsetTop + oDiv2.offsetHeight;////大方框到页面顶部的距离 + 本身的高
+			
+			
+			
+			if( L1 < L2 || T1 < T2 || R1 > R2 || B1 > B2 )
+			{
+				oDiv2.style.background = 'red';
+				oDiv2.style.color = '#fff';
+				//oDiv2.innerHTML = '在我这释放元素';
+			}
+			else
+			{
+				oDiv2.style.background = 'yellow';
+				//oDiv2.innerHTML = '可以释放鼠标了';
+				oDiv2.style.color = 'red';
+			};
+			
+			
+		};
+		
+		document.onmouseup = function()
+		{
+			
+			document.onmouseup = document.onmousemove = null;
+			
+			if(oC.offsetLeft == 0)
+			{
+				document.onmouseup = document.onmousemove = null;
+				document.body.removeChild(oC);
+				return ;
+			};
+			
+			var nTotal = 0;
+			var oSpan = oDiv2.getElementsByTagName('span');
+			var oEm = oDiv2.getElementsByTagName('em');
+			var oFont = oDiv2.getElementsByTagName('font');
+			
+			if( !(L1 < L2 || T1 < T2 || R1 > R2 || B1 > B2) )
+			{				
+				if(!obj[oName])
+				{
+					var newDiv = document.createElement('div');
+					var newEm = document.createElement('em');
+					newEm.innerHTML = 1;
+					var newSpan = document.createElement('span'); 
+					newSpan.innerHTML = oName;
+					var newFont = document.createElement('font');
+					newFont.innerHTML = oPrice + '元';
+					newDiv.appendChild( newEm );
+					newDiv.appendChild( newSpan );
+					newDiv.appendChild( newFont );
+					oDiv2.appendChild( newDiv );
+					
+					obj[oName] = 1;
+					console.log(1);
+				}
+				else
+				{
+					
+					for(var i=0;i<oSpan.length;i++)
+					{
+						
+						if( oName==oSpan[i].innerHTML )
+						{
+							oEm[i].innerHTML = parseInt( oEm[i].innerHTML )+1;
+							oFont[i].innerHTML = parseInt( oEm[i].innerHTML )*oPrice+'元';
+							
+						};
+						
+					};
+					
+					
+				};
+				//console.log(1);
+				for(var i=0;i<oFont.length;i++)
+				{
+					
+					nTotal += parseFloat(oFont[i].innerHTML);
+				};
+				
+				oTotal.innerHTML = nTotal + '元';
+			};
+			
+			
+			document.body.removeChild(oC);
+		};
+		
+		return false;
+	};
+	
+};
+
+
+var json = {'产品1':'111'}
+console.log( json['产品1']  );
+</script>
+<body>
+<div id="div1" class="items"><span>javascrpt权威指南</span><font>111元</font></div>
+<div id="div3" class="items"><span>javascrpt</span><font>11元</font></div>
+<div id="div2"></div>
+<div id="total"></div>
+<style>
+*{margin:0;padding:0;}
+.items{width:300px;height:30px;background:blue; position:relative; z-index:4; border-bottom:2px solid red;}
+#div2{width:300px;height:300px;background:red;position:absolute;top:200px;left:400px;color:#fff;padding:10px; z-index:3;}
+.ccc{border:1px solid #000; position:absolute; z-index:5;}
+#total{background:#000;color:#fff;padding:15px;}
+</style>
+
+</body>
+</html>
